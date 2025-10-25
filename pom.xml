@@ -142,7 +142,7 @@
     <dependency>
       <groupId>org.ohdsi.sql</groupId>
       <artifactId>SqlRender</artifactId>
-      <version>1.6.8</version>
+      <version>1.19.2</version>
     </dependency>
     <dependency>
       <groupId>com.opentable.components</groupId>
