@@ -18,6 +18,7 @@
  */
 package org.ohdsi.circe.vocabulary;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.ohdsi.analysis.Utils;
@@ -35,10 +36,21 @@ public class ConceptSetExpression {
 
   public static class ConceptSetItem {
 
+    @JsonProperty("concept")
     public Concept concept;
+
+    @JsonProperty("isExcluded")
     public boolean isExcluded;
+
+    @JsonProperty("includeDescendants")
     public boolean includeDescendants;
+
+    @JsonProperty("includeMapped")
     public boolean includeMapped;
+
+    // No-arg constructor required for Jackson deserialization
+    public ConceptSetItem() {
+    }
 
     @Override
     public boolean equals(Object o) {
