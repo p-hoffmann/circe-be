@@ -14,7 +14,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.ohdsi.circe.check.Checker;
+import org.ohdsi.circe.check.Warning;
 
 // GraalVM native-image entrypoints
 public class CirceNativeEntryPoints {
@@ -180,6 +183,36 @@ public class CirceNativeEntryPoints {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             pw.println("/* sqlrender_translate error: " + t.getClass().getName() + ": " + t.getMessage());
+            t.printStackTrace(pw);
+            pw.println("*/");
+            pw.flush();
+            String msg = sw.toString();
+            LAST_RESULT.set(msg);
+            return CTypeConversion.toCString(msg).get();
+        }
+    }
+
+    @CEntryPoint(name = "circe_check_cohort")
+    public static CCharPointer checkCohort(
+            @CEntryPoint.IsolateThreadContext IsolateThread thread,
+            CCharPointer exprJson) {
+        try {
+            String expr = CTypeConversion.toJavaString(exprJson);
+            CohortExpression expression = CohortExpression.fromJson(expr);
+
+            Checker checker = new Checker();
+            List<Warning> warnings = checker.check(expression);
+
+            // Convert warnings to JSON
+            ObjectMapper mapper = new ObjectMapper();
+            String result = mapper.writeValueAsString(warnings);
+
+            LAST_RESULT.set(result);
+            return CTypeConversion.toCString(result).get();
+        } catch (Throwable t) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            pw.println("/* circe_check error: " + t.getClass().getName() + ": " + t.getMessage());
             t.printStackTrace(pw);
             pw.println("*/");
             pw.flush();
