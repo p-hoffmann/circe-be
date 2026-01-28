@@ -90,6 +90,10 @@
       <name>repo.ohdsi.org</name>
       <url>https://repo.ohdsi.org/nexus/content/groups/public</url>
     </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -140,9 +144,9 @@
       <artifactId>freemarker</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ohdsi.sql</groupId>
-      <artifactId>SqlRender</artifactId>
-      <version>1.19.2</version>
+      <groupId>com.github.data2evidence</groupId>
+      <artifactId>d2e-SqlRender</artifactId>
+      <version>v1.19.2</version>
     </dependency>
     <dependency>
       <groupId>com.opentable.components</groupId>
